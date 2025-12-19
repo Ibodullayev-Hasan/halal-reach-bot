@@ -33,7 +33,7 @@ export class BotService {
 			this.bot.command("profile", isUser, async (ctx) => UserProfile(ctx));
 			this.bot.command("help", isUser, async (ctx) => BotHelp(ctx));
 			this.bot.command("super_admin", isUser, async (ctx) => ctx.scene.enter(`superAdmin`));
-			this.bot.command("admin", async (ctx) => ctx.scene.enter(`admin`))
+			this.bot.command("admin", isUser, async (ctx) => ctx.scene.enter(`admin`))
 
 			// inline keyboard ni tinglash
 			this.bot.action("accept", async (ctx) => await this.registerCommand.userAccept(ctx));
