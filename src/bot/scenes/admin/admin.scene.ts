@@ -186,7 +186,8 @@ export const addProductWizard = new Scenes.WizardScene<IMyContext>(`addProductWi
 							Markup.button.callback("Yana mahsulot qo'shish", `add_product`),
 							Markup.button.callback("Mahsulotlar bo'limiga o'tish", `productScene`)
 						])
-					)
+					),
+					ctx.scene.leave()
 				])
 			});
 
