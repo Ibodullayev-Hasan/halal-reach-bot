@@ -13,7 +13,7 @@ export class User {
 	@Column()
 	firstName: string
 
-	@Column()
+	@Column({type:"text", nullable:true})
 	lastName: string
 
 	@Column()
