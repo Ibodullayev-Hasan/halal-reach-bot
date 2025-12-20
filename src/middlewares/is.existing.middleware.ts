@@ -5,7 +5,10 @@ export const isExisting = async (ctx: Context, next: () => Promise<void>): Promi
 
 	const user = await userRepo.findOne({ where: { telegramId: ctx.from.id } })
 
-	if (user) return
+	if (user) {
+		await ctx.reply(`Siz allaqachon ro'yxatdan o'tgansiz! \n/admin\n/profile\n/help kommandalarini birini bering`)
+		return
+	}
 
 	await next()
 }
