@@ -4,9 +4,14 @@
   "description": "A TypeScript-based Express.js application with MongoDB and Mongoose",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc && tsc-alias",
     "start": "node dist/index.js",
+    "migration:create": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create src/db/migrations/AddUserRoleToUser",
+    "migration:generate": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate src/db/migrations/AddUserRoleToUser -d src/db/data-source.ts",
+    "migration:run": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/db/data-source.ts",
+    "migration:show": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:show -d src/db/data-source.ts",
+    "migration:revert": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/db/data-source.ts",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
   },
