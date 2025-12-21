@@ -4,7 +4,7 @@
   "description": "A TypeScript-based Express.js application with MongoDB and Mongoose",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "nodemon",
     "build": "tsc && tsc-alias",
     "start": "node dist/index.js",
     "migration:create": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create src/db/migrations/AddUserRoleToUser",
