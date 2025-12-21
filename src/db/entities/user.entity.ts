@@ -13,7 +13,7 @@ export class User {
 	@Column()
 	firstName: string
 
-	@Column({type:"text", nullable:true})
+	@Column({ type: "text", nullable: true })
 	lastName: string
 
 	@Column()
@@ -24,6 +24,9 @@ export class User {
 
 	@Column({ type: "enum", enum: UserRoles, default: UserRoles.SUPER_ADMIN })
 	userRole: UserRoles
+
+	@Column({ type: "boolean", default: false })
+	temporaryRoleReversal?: boolean
 
 	@Column({ type: "varchar", length: 20 })
 	phoneNumber: string;
