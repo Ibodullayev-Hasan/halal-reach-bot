@@ -3,13 +3,15 @@ import { environments } from "@config/environments";
 import { StartCommand } from "./commands/start.command";
 import { TelegramError } from "telegraf";
 import { logger } from "@utils/logger";
-import { RegisterCommand } from "./commands/regsiter.command";
+import { RegisterCommand } from "./commands/register.command";
 import { UserProfile } from "./commands/profile";
 import { BotHelp } from "./commands/help";
 import { isUser } from "middlewares/is.user.middleware";
 import { isExisting } from "middlewares/is.existing.middleware";
 import { IMyContext } from "./my-context";
 import { myStage } from "./scenes";
+import { isSuperAdmin } from "middlewares/is.super.admin.middleware";
+import { isAdmin } from "middlewares/is.admin.middleware";
 
 export class BotService {
 	private bot: Telegraf<IMyContext>;
@@ -32,8 +34,8 @@ export class BotService {
 			this.bot.command("start", isExisting, (ctx) => this.startCommand.startMessage(ctx));
 			this.bot.command("profile", isUser, async (ctx) => UserProfile(ctx));
 			this.bot.command("help", isUser, async (ctx) => BotHelp(ctx));
-			this.bot.command("super_admin", isUser, async (ctx) => ctx.scene.enter(`superAdmin`));
-			this.bot.command("admin", isUser, async (ctx) => ctx.scene.enter(`admin`))
+			this.bot.command("super_admin", isSuperAdmin, async (ctx) => ctx.scene.enter(`superAdmin`));
+			this.bot.command("admin", isAdmin, async (ctx) => ctx.scene.enter(`admin`))
 
 			// inline keyboard ni tinglash
 			this.bot.action("accept", async (ctx) => await this.registerCommand.userAccept(ctx));
