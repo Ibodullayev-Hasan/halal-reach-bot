@@ -50,12 +50,20 @@ export class SuperAdminEvent {
 		}
 	};
 
-	async changeRole(role: UserRoles, ctx?: IMyContext,) {
+	// role o'zgartirish
+	async changeRole(role: UserRoles, ctx: IMyContext,) {
 		try {
+
 			const user = await userRepo.findOne({ where: { telegramId: ctx?.from?.id } });
-			
+
+			if (!user) {
+				await ctx.reply("❌ Error: Please register first by clicking /start")
+				return false
+			};
+
 			user.userRole = role
-			
+			user.temporaryRoleReversal = true
+
 			await userRepo.save(user);
 
 			return true
