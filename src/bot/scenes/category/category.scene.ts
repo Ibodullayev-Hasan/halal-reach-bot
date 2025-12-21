@@ -1,13 +1,9 @@
 import { IMyContext } from "@bot/my-context";
 import { categoryRepo } from "db/repositories";
 import { Markup, Scenes } from "telegraf";
+import { keepSceneAlive } from "@bot/utils";
 
-
-const keepSceneAlive = async (ctx: any, next: () => Promise<void>) => {
-	ctx.scene?.resetLeaveTimer?.();
-	return next();
-};
-
+/* ====================== category SCENE ====================== */
 export const categoryScene = new Scenes.BaseScene<IMyContext>(`categoryScene`);
 
 categoryScene.use(keepSceneAlive);

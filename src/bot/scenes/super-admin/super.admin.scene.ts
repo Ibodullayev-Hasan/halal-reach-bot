@@ -3,14 +3,11 @@ import { IMyContext } from "@bot/my-context";
 import { UserRoles } from "enums/roles.enum";
 import { SuperAdminEvent } from "@bot/events/super.admin.events";
 import { setRoleAndExit } from "./utils/setRoleAndExit";
+import { keepSceneAlive } from "@bot/utils";
 
 const event = new SuperAdminEvent();
 
-// Timeout ni o‘chirish uchun universal middleware
-const keepSceneAlive = async (ctx: any, next: () => Promise<void>) => {
-	ctx.scene?.resetLeaveTimer?.();
-	return next();
-};
+
 /* ====================== SUPER ADMIN SCENE ====================== */
 export const superAdminScene = new Scenes.BaseScene<IMyContext>("superAdmin");
 superAdminScene.use(keepSceneAlive);
