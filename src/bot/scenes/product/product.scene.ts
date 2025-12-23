@@ -4,6 +4,7 @@ import { keepSceneAlive } from "@bot/utils";
 import { productData } from "./product.data";
 import { createProduct, prodcutList } from "modules/products";
 import { categoryList, findByIdCategory } from "modules/categories/category.service";
+import { buildProductMessage } from "./utils";
 
 
 /* ====================== Product SCENE ====================== */
@@ -186,10 +187,6 @@ productScene.hears(`🆕  Qo'shish`, async (ctx: IMyContext) => {
 	await ctx.scene.enter(`addProductWizard`)
 })
 
-// MarkdownV2 uchun escape funksiyasi
-function escapeMarkdownV2(text: string): string {
-	return text.replace(/[_*[\]()~`>#+-=|{}.!]/g, '\\$&');
-}
 
 // get products list
 productScene.hears(`📋  Mahsulotlar listi`, async (ctx) => ctx.scene.enter(`productListWizard`));
@@ -213,52 +210,97 @@ export const productListWizard = new Scenes.WizardScene<IMyContext>(`productList
 	},
 
 	// Step 2: Handle category selection and show products
-	async (ctx: IMyContext) => {
-		if (ctx.callbackQuery && "data" in ctx.callbackQuery) {
+	async (ctx) => {
+		try {
+			if (!ctx.callbackQuery || !("data" in ctx.callbackQuery)) {
+				await ctx.reply("Iltimos, kategoriyani tanlang.");
+				return;
+			}
+
+			// 🔴 CALLBACK MAʼLUMOTLARINI DARHOL OLIB QO‘YAMIZ
+			const chatId = ctx.chat!.id;
 			const categoryId = ctx.callbackQuery.data.split("_")[2];
+
+			// 🔴 TELEGRAMGA DARHOL JAVOB
+			await ctx.answerCbQuery();
 
 			const category = await findByIdCategory(ctx, categoryId);
 
-			if (!category || category.products.length === 0) {
-				await ctx.reply("Ushbu kategoriyada hech qanday mahsulot topilmadi.");
-				return
+			if (!category || !category.products.length) {
+				await ctx.telegram.sendMessage(
+					chatId,
+					"Ushbu kategoriyada mahsulot yo‘q."
+				);
+				return ctx.scene.leave();
+			}
+
+			await ctx.deleteMessage();
+
+			await ctx.telegram.sendMessage(
+				chatId,
+				`<code>${category.name}</code> kategoriyasidagi mahsulotlar`,
+				{ parse_mode: "HTML" }
+			);
+
+			// 🔴 ENDI ctx EMAS, FAQAT telegram API
+			for (const product of category.products) {
+				const messageText = buildProductMessage(product, category);
+
+				if (product.productImg) {
+					await ctx.telegram.sendPhoto(
+						chatId,
+						product.productImg,
+						{
+							caption: messageText,
+							parse_mode: "MarkdownV2"
+						}
+					);
+				} else {
+					await ctx.telegram.sendMessage(
+						chatId,
+						messageText,
+						{ parse_mode: "MarkdownV2" }
+					);
+				}
 			};
 
-			for (const product of category.products) {
-				
-				const categoryName = category.name;
-				const categoryImg = category.categoryImg || "null";
-				const productImg = product.productImg || null;
-				const description = product.description || "null";
 
-				// Escape qilinadigan qismlar
-				const escapedName = escapeMarkdownV2(product.name);
-				const escapedPrice = escapeMarkdownV2(product.price.toString());
-				const escapedDescription = escapeMarkdownV2(description);
-				const escapedCategoryName = escapeMarkdownV2(categoryName);
-				const escapedCategoryImg = escapeMarkdownV2(categoryImg);
+			//// 🔴 O‘XIRGI XABAR VA "YANA KO‘RISH" KNOPKASI ////////
+			const productInlineKeyboards = Markup.inlineKeyboard([
+				[
+					Markup.button.callback("Yana ko‘rish", "show_categories_again"),
+					Markup.button.callback("Mahsulotlar bo‘limiga qaytish", "return_to_product_menu")
+				]
+			]);
 
-				let messageText = `🔹 **Nomi:** ${escapedName}\n`;
-				messageText += `💰 **Narxi:** ${escapedPrice} so'm\n`;
-				messageText += `📝 **Tavsifi:** ${escapedDescription}\n`;
-				messageText += `📂 **Kategoriyasi:** ${escapedCategoryName}\n`;
-				messageText += `🖼️ **Kategoriya rasmi:** ${escapedCategoryImg}\n\n`;
+			await Promise.all([
+				ctx.telegram.sendMessage(
+					chatId,
+					`...`,
+					{ reply_markup: { remove_keyboard: true } }
+				),
 
-				if (productImg) {
+				ctx.telegram.sendMessage(
+					chatId,
+					"Mahsulotlar ro'yxati tugadi. Yana ko‘rishni xohlaysizmi?",
+					{
+						reply_markup: {
+							...productInlineKeyboards.reply_markup,
+							remove_keyboard: true
+						}
+					}
+				)
+			]);
+			////////////// -------------- ////////////////
 
-					await ctx.replyWithPhoto(productImg, {
-						caption: messageText,
-						parse_mode: 'MarkdownV2'
-					});
-				} else {
-					await ctx.reply(messageText, { parse_mode: 'MarkdownV2' });
-				}
-			}
-		} else {
-			await ctx.reply("Iltimos, kategoriyani tanlang.");
-			return; // Stay in this step	
-		};
+			// 🔴 WIZARDNI YOPISH
+			return ctx.scene.leave();
 
+		} catch (err) {
+			console.error(err);
+			await ctx.reply("Xatolik yuz berdi. Keyinroq urinib ko‘ring.");
+			return ctx.scene.leave();
+		}
 	}
 );
 
