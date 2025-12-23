@@ -41,7 +41,11 @@ export class BotService {
 			this.bot.action("accept", async (ctx) => await this.registerCommand.userAccept(ctx));
 			this.bot.action(`add_category`, async (ctx) => await ctx.scene.enter(`categoryScene`));
 			this.bot.action(`return_to_add_product`, async (ctx) => await ctx.scene.enter(`productScene`));
-
+			this.bot.action(`return_to_product_menu`, async (ctx) => await ctx.scene.enter(`productScene`));
+			this.bot.action("show_categories_again", async (ctx) => {
+				await ctx.answerCbQuery();
+				await ctx.scene.enter("productListWizard");
+			})
 			// bot on
 			this.bot.on("contact", async (ctx) => { this.registerCommand.register(ctx) })
 
