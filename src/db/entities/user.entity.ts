@@ -22,7 +22,7 @@ export class User {
 	@Column({ type: "text", nullable: true })
 	avatarUri?: string
 
-	@Column({ type: "enum", enum: UserRoles, default: UserRoles.SUPER_ADMIN })
+	@Column({ type: "enum", enum: UserRoles, default: UserRoles.CLIENT })
 	userRole: UserRoles
 
 	@Column({ type: "boolean", default: false })
