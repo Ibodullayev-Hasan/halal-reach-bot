@@ -1,4 +1,4 @@
-import { Telegraf, Context, session } from "telegraf";
+import { Telegraf, session } from "telegraf";
 import { environments } from "@config/environments";
 import { StartCommand } from "./commands/start.command";
 import { TelegramError } from "telegraf";
@@ -36,16 +36,25 @@ export class BotService {
 			this.bot.command("help", isUser, async (ctx) => BotHelp(ctx));
 			this.bot.command("super_admin", isSuperAdmin, async (ctx) => ctx.scene.enter(`superAdmin`));
 			this.bot.command("admin", isAdmin, async (ctx) => ctx.scene.enter(`admin`))
+			this.bot.command("client", isUser, async (ctx) => ctx.scene.enter(`client`))
 
 			// inline keyboard ni tinglash
 			this.bot.action("accept", async (ctx) => await this.registerCommand.userAccept(ctx));
 			this.bot.action(`add_category`, async (ctx) => await ctx.scene.enter(`categoryScene`));
-			this.bot.action(`return_to_add_product`, async (ctx) => await ctx.scene.enter(`productScene`));
+			this.bot.action(`add_product`, async (ctx) => {
+				await ctx.answerCbQuery();
+				await ctx.scene.enter(`addProductWizard`)
+			});
+			this.bot.action(`return_client_menu`, async (ctx) => {
+				await ctx.answerCbQuery();
+				await ctx.scene.enter(`client`)
+			});
 			this.bot.action(`return_to_product_menu`, async (ctx) => await ctx.scene.enter(`productScene`));
 			this.bot.action("show_categories_again", async (ctx) => {
 				await ctx.answerCbQuery();
 				await ctx.scene.enter("productListWizard");
 			})
+
 			// bot on
 			this.bot.on("contact", async (ctx) => { this.registerCommand.register(ctx) })
 
