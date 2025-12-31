@@ -32,11 +32,13 @@ export async function setRoleAndExit(ctx: IMyContext, role: UserRoles) {
 			],
 			[UserRoles.CLIENT]: [
 				{ command: "profile", description: "Profil" },
-				{ command: "orders", description: "Buyurtmalar" },
+				{ command: "client", description: "Mijoz menyusi" },
+				{ command: "super_admin", description: "Super Admin panel" },
 			],
 			[UserRoles.COURIER]: [
 				{ command: "profile", description: "Profil" },
 				{ command: "orders", description: "Yetkazib berish" },
+				{ command: "super_admin", description: "Super Admin panel" },
 			],
 		};
 
