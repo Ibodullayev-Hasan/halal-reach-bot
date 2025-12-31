@@ -1,15 +1,15 @@
+import "reflect-metadata"
 import express from 'express';
 import cors from 'cors';
 import { AppDataSource } from 'db/data-source';
 import { logger } from '@utils/logger';
 import { BotService } from '@bot/bot';
-import "reflect-metadata"
 
 const app = express();
 const botService = new BotService();
 
 AppDataSource.initialize()
-	.then(() => { logger.info(`Successfully connected db ✅ `) })
+	.then(() => { logger.info(`Successfully connected db ✅`) })
 	.catch((err) => { logger.error(`DB ERROR: ${err} `) })
 
 // 
