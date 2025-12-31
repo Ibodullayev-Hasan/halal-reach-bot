@@ -1,7 +1,6 @@
 import { IMyContext } from "@bot/my-context"
 import { Category } from "db/entities/category.entity"
 import { categoryRepo } from "db/repositories";
-import { REPL_MODE_SLOPPY } from "repl";
 
 export const createCategory = async () => {
 
