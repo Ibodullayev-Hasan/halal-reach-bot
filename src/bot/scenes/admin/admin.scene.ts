@@ -35,5 +35,3 @@ adminScene.hears(`🛑  Chiqish`, async (ctx) => {
 		ctx.reply("Admin paneldan chiqdingiz", Markup.removeKeyboard())
 	]);
 });
-
-
