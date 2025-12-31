@@ -1,7 +1,7 @@
 {
-  "name": "bot1",
+  "name": "Halal Reach Bot",
   "version": "1.0.0",
-  "description": "A TypeScript-based Express.js application with MongoDB and Mongoose",
+  "description": "Halal Reach Orders Bot",
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon",
@@ -16,7 +16,11 @@
     "format": "prettier --write ."
   },
   "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ibodullayev-Hasan/halal-reach-bot"
+  },
+  "author": "Ibodullayev.X",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
