@@ -1,9 +1,11 @@
 import { IMyContext } from "@bot/my-context";
 import { Scenes } from "telegraf";
-import { productScene, addProductWizard, productListWizard } from "./product.scene";
+import { productScene, addProductWizard, productListWizard, updateProductWizard, deleteProductWizard } from "./product.scene";
 
 export const productStage: Scenes.BaseScene<IMyContext>[] = [
 	productScene,
 	addProductWizard,
-	productListWizard
+	productListWizard,
+	updateProductWizard,
+	deleteProductWizard
 ];
