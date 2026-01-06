@@ -247,7 +247,6 @@ export const productListWizard = new Scenes.WizardScene<IMyContext>(`productList
 				return;
 			}
 
-			// 🔴 CALLBACK MAʼLUMOTLARINI DARHOL OLIB QO‘YAMIZ
 			const chatId = ctx.chat!.id;
 			const categoryId = ctx.callbackQuery.data.split("_")[2];
 
@@ -260,7 +259,8 @@ export const productListWizard = new Scenes.WizardScene<IMyContext>(`productList
 					chatId,
 					"Ushbu kategoriyada mahsulot yo‘q."
 				);
-				return ctx.scene.leave();
+
+				return;
 			}
 
 			await ctx.deleteMessage();
@@ -549,7 +549,7 @@ export const deleteProductWizard = new Scenes.WizardScene<IMyContext>(`deletePro
 
 		await ctx.telegram.sendMessage(
 			chatId,
-			`Tahrirlamoqchi bo‘lgan mahsulot ID sini kiriting...`
+			`O'chirmoqchi bo‘lgan mahsulot ID sini kiriting...`
 		);
 
 		return ctx.wizard.next()

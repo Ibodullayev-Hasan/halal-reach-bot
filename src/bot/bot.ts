@@ -37,6 +37,7 @@ export class BotService {
 			this.bot.command("super_admin", isSuperAdmin, async (ctx) => ctx.scene.enter(`superAdmin`));
 			this.bot.command("admin", isAdmin, async (ctx) => ctx.scene.enter(`admin`))
 			this.bot.command("client", isUser, async (ctx) => ctx.scene.enter(`client`))
+			this.bot.command("courier", isUser, async (ctx) => ctx.scene.enter(`courier`))
 
 			// inline keyboard ni tinglash
 			this.bot.action("accept", async (ctx) => await this.registerCommand.userAccept(ctx));
@@ -49,7 +50,14 @@ export class BotService {
 				await ctx.answerCbQuery();
 				await ctx.scene.enter(`client`)
 			});
-			this.bot.action(`return_to_product_menu`, async (ctx) => await ctx.scene.enter(`productScene`));
+			this.bot.action(`return_to_product_menu`, async (ctx) => {
+				await ctx.answerCbQuery();
+				await ctx.scene.enter(`productScene`)
+			});
+			this.bot.action(`return_to_category_menu`, async (ctx) => {
+				await ctx.answerCbQuery();
+				await ctx.scene.enter(`categoryScene`);
+			});
 			this.bot.action("show_categories_again", async (ctx) => {
 				await ctx.answerCbQuery();
 				await ctx.scene.enter("productListWizard");

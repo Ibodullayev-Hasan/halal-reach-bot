@@ -16,7 +16,7 @@ superAdminScene.enter(async (ctx) => {
 
 	const keyboard = Markup.keyboard([
 		["📊  Statistika", "⚙️  Settings"],
-		["🆕  Yangi Admin"],
+		["🆕  Yangi Admin", "👷  Yangi Courier"],
 		["🛑  Chiqish"],
 	]).resize();
 
@@ -31,6 +31,7 @@ superAdminScene.enter(async (ctx) => {
 
 superAdminScene.hears("📊  Statistika", (ctx) => event.statistics(ctx));
 superAdminScene.hears("🆕  Yangi Admin", (ctx) => ctx.scene.enter("addAdmin"));
+superAdminScene.hears("👷  Yangi Courier", (ctx) => ctx.scene.enter("addCourier"));
 superAdminScene.hears("⚙️  Settings", (ctx) => ctx.scene.enter("settings"));
 superAdminScene.hears("🛑  Chiqish", async (ctx) => {
 	await Promise.all([

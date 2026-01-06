@@ -1,6 +1,5 @@
 import { IMyContext } from "@bot/my-context";
 import { keepSceneAlive } from "@bot/utils";
-import { categoryList } from "modules/categories/category.service";
 import { Markup, Scenes } from "telegraf";
 
 export const clientScene = new Scenes.BaseScene<IMyContext>(`client`);
@@ -27,33 +26,7 @@ clientScene.hears(`🛑  Chiqish`, async (ctx) => {
 clientScene.hears(`🛒  Buyurtma berish`, async (ctx) => ctx.scene.enter(`newOrderWizard`));
 
 clientScene.hears(`🧺  Buyurtmalarim`, async (ctx) => {
-	await ctx.reply("Sizning buyurtmalaringiz ro'yxati hozircha tayyor emas.");
+	await ctx.scene.enter(`orderListWizard`)
 });
 
-// new order wizard
-export const newOrderWizard = new Scenes.WizardScene<IMyContext>(
-	`newOrderWizard`,
 
-	// Step 1: start order
-	async (ctx: IMyContext) => {
-		const categories = await categoryList(ctx);
-		const chatId = ctx.chat!.id;
-
-		if (categories.length === 0) {
-
-			const returnMenu = Markup.inlineKeyboard([[Markup.button.callback(`Menyuga qaytish ↩️`, `return_client_menu`)]])
-
-			await ctx.telegram.sendMessage(chatId, `Afsus mijoz hozircha bizda mahsulotlar yoq 😔 `, Markup.removeKeyboard())
-			await ctx.telegram.sendMessage(chatId, `Menyuga qaytish uchun pastdagi tugmani bosing`, returnMenu)
-		};
-
-		const categoryButtons = categories.map((cat) => Markup.button.callback(cat.name, `cat_${cat.id}`));
-
-		await ctx.reply(`Buyurtma berish uchun categoryni tanlang`, Markup.inlineKeyboard(categoryButtons, { columns: 2 }));
-		return ctx.wizard.next();
-	},
-
-	async() => {
-		
-	}
-);

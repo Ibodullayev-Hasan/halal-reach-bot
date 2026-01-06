@@ -80,16 +80,19 @@ export const addCategoryWizard = new Scenes.WizardScene<IMyContext>(`addCategory
 		const categoryName = ctx.message.text;
 
 		if (ctx.session.fromFlag?.fromAddProduct) {
+			await ctx.reply(`...loading`, Markup.removeKeyboard())
+			
 			await Promise.all([
-
+				
 				categoryRepo.save({ name: categoryName }),
 				ctx.session.fromFlag = { fromAddProduct: false },
 				ctx.reply(`Kategoriya "${categoryName}" muvaffaqiyatli qo'shildi!`, returnToAddProduct)
 			]);
-
+			
 			return ctx.scene.leave();
-		}
-
+		};
+		
+		await ctx.reply(`...loading`, Markup.removeKeyboard())
 		await Promise.all([
 			categoryRepo.save({ name: categoryName }),
 			ctx.reply(`Kategoriya "${categoryName}" muvaffaqiyatli qo'shildi!`, backCategoryMenu)

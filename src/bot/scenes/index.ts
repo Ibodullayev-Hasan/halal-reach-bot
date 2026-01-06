@@ -7,6 +7,7 @@ import { productStage } from "./product";
 import { orderStage } from "./order";
 import { statisticsStage } from "./statistcs";
 import { clientStage } from "./client";
+import { courierStage } from "./courier";
 
 export const myStage = new Scenes.Stage<IMyContext>(
     [
@@ -16,7 +17,8 @@ export const myStage = new Scenes.Stage<IMyContext>(
         ...productStage,
         ...orderStage,
         ...statisticsStage,
-        ...clientStage
+        ...clientStage,
+        ...courierStage,
     ],
     { ttl: 3600_000 }
 );

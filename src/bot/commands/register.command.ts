@@ -42,7 +42,7 @@ export class RegisterCommand {
 			// ctx.user ga natijani qo'yish
 			(ctx as any).user = newUser;
 
-			await botResSchema(ctx, `✅ ${newUser.firstName} muvaffaqiyatli ro'yxatdan o'tdi`);
+			await botResSchema(ctx, `✅ ${newUser.firstName} muvaffaqiyatli ro'yxatdan o'tildi`);
 
 			// bot menu ni foydalanuvchi roliga qarab sozlash
 			if (ctx.user && checkRole(ctx.user.userRole, [UserRoles.SUPER_ADMIN])) {
@@ -59,7 +59,8 @@ export class RegisterCommand {
 				await ctx.telegram.setMyCommands(
 					[
 						{ command: "profile", description: "Show user profile" },
-						{ command: "help", description: "Show help text" },
+						{ command: "client", description: "Mijoz menyusi" },
+						{ command: "help", description: "Show help text" }
 					],
 					{ scope: { type: "chat", chat_id: ctx.chat!.id } }
 				);
@@ -67,7 +68,7 @@ export class RegisterCommand {
 		} catch (error) {
 			console.error("❌ register error:", error);
 			await ctx.reply(
-				"Nimadir xato ketdi 🥶\nBiroz kuting va qayta urinib ko‘ring 😊"
+				"Nimadir xato ketdi 🥶\nBirozdan keyin qayta urinib ko‘ring 😊"
 			);
 		}
 	}

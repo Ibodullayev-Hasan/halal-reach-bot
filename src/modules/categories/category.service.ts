@@ -9,6 +9,9 @@ export const createCategory = async () => {
 export const findByIdCategory = async (ctx: IMyContext, id: string): Promise<Category | null> => {
 	try {
 		const category = await categoryRepo.findOne({ where: { id }, relations: ['products'] });
+
+		if(!category) return null;
+		
 		return category
 	} catch (error: any) {
 		console.error(error.message);

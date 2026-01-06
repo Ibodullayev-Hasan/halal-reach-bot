@@ -19,6 +19,7 @@ interface MySession extends Scenes.WizardSession<MySceneSession> {
 	description?: string;
 	orderId?: string;
 	productId?: string;
+	orders?: string[];
 	editingField?: keyof Product;
 	fromFlag?: {
 		fromAddProduct?: boolean;
